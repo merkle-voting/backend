@@ -1,0 +1,19 @@
+{
+  "name": "merkle",
+  "version": "1.0.0",
+  "description": "merkle voting backend ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/merkle-voting/backend.git"
+  },
+  "author": "calebdeji",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/merkle-voting/backend/issues"
+  },
+  "homepage": "https://github.com/merkle-voting/backend#readme"
+}
