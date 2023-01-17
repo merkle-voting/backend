@@ -1,14 +1,19 @@
-var MongoClient = require('mongodb').MongoClient;
+const configs = require('../configs/run');
+const MongoClient = require('mongodb').MongoClient;
+
+configs.runConfigs();
 
 const URL = process.env.DB_URL;
 
 const client = new MongoClient(URL);
 
-function connect(databaseName) {
+async function connect(databaseName) {
+  await client.connect();
   const db = client.db(databaseName);
+  return db;
 }
 
-function disconnect() {
+async function disconnect() {
   client.close();
 }
 
