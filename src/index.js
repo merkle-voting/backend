@@ -10,12 +10,14 @@ function main() {
   app.use('/voters', routes.VotersRouter);
   app.use('/elections', routes.ElectionRouter);
 
-  // app.use('*', (req, res) => {
-  //   return res.status(404).json({ success: false, message: 'Unknown route' });
-  // });
+  app.use('*', (req, res) => {
+    return res.status(404).json({ success: false, message: 'Unknown route' });
+  });
 
-  app.listen(3000, () => {
-    console.log('App listening on 3000 port');
+  const PORT = process.env.PORT || 3000;
+
+  app.listen(PORT, () => {
+    console.log(`App listening on ${PORT} port`);
   });
 }
 
