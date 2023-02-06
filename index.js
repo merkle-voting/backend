@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const configs = require('./src/configs/run');
 const routes = require('./src/routes');
 
@@ -6,6 +7,8 @@ function main() {
   configs.runConfigs();
 
   const app = express();
+
+  app.use(cors());
 
   app.use('/voters', routes.VotersRouter);
   app.use('/elections', routes.ElectionRouter);
