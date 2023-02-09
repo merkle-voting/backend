@@ -18,7 +18,15 @@ router.get('/:name/:id/:address', async (req, res) => {
       },
     };
 
-    let cursor = proofCollection.find({}, options);
+    console.log({ id, address });
+
+    let cursor = proofCollection.find(
+      {
+        ELECTIONID: id,
+        ADDRESS: address,
+      },
+      options
+    );
 
     let proofs = [];
     await cursor.forEach((doc) => {
@@ -26,7 +34,7 @@ router.get('/:name/:id/:address', async (req, res) => {
     });
 
     if (proofs.length <= 0) {
-      return res.status(400).json({ success: true, message: 'No proof recorded' });
+      return res.status(400).json({ success: false, message: 'No proof recorded' });
     }
 
     return res.status(200).json({ success: true, message: 'proofs fetched successfully', proofs });
