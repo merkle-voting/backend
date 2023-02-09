@@ -67,7 +67,7 @@ const generateMerkleTree = async (collection) => {
       LEAF: '0x' + leaves[index].toString(),
       PROOF: proof.map((p) => '0x' + p.data.toString('hex')),
       ADDRESS: doc['ADDRESS'],
-      id: doc['ELECTIONID'],
+      ELECTIONID: doc['ELECTIONID'],
     });
   });
 
