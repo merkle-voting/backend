@@ -14,7 +14,7 @@ const { monitorCollectionUsingEventEmitter } = require('../../database/stream');
  */
 
 /**
- * @typedef {{ leaf : string; address : string; proof : string[] }} AddressProof
+ * @typedef {{ LEAF : string; ADDRESS : string; PROOF : string[] }} AddressProof
  */
 
 const router = express.Router();
@@ -61,16 +61,19 @@ const generateMerkleTree = async (collection) => {
 
   documents.forEach((doc, index) => {
     const leaf = leaves[index];
-    // console.log({ leaf, doc });
+    console.log({ doc });
     const proof = tree.getProof(leaf);
     addressProofs.push({
-      leaf: '0x' + leaves[index].toString(),
-      proof: proof.map((p) => '0x' + p.data.toString('hex')),
-      address: doc['ADDRESS'],
+      LEAF: '0x' + leaves[index].toString(),
+      PROOF: proof.map((p) => '0x' + p.data.toString('hex')),
+      ADDRESS: doc['ADDRESS'],
+      id: doc['ELECTIONID'],
     });
   });
 
-  return addressProofs;
+  const root = '0x' + tree.getRoot().toString('hex');
+
+  return { addressProofs, root };
 };
 
 /**
@@ -108,15 +111,20 @@ router.put('/add-id', async (req, res) => {
 
     const votersCollection = db.collection(data.election_name);
     const merkleCollection = db.collection(`${data.election_name}-${data.election_id}`);
+    const rootCollection = db.collection(`trees`);
     const merkleCollectionInsertOptions = { ordered: true };
 
     const result = await votersCollection.updateMany({}, { $set: { ELECTIONID: data.election_id } });
-    console.log({ result });
-    const addressProofs = await generateMerkleTree(votersCollection);
 
-    merkleCollection.insertMany(addressProofs, merkleCollectionInsertOptions);
+    const { addressProofs, root } = await generateMerkleTree(votersCollection);
 
-    return res.status(200).json({ success: true, message: 'Election ID successfully added' });
+    await merkleCollection.insertMany(addressProofs, merkleCollectionInsertOptions);
+    await rootCollection.insertOne({
+      name: `${data.election_name}-${data.election_id}`,
+      value: root,
+    });
+
+    return res.status(200).json({ success: true, message: 'Election ID successfully added', root });
   } catch (error) {
     console.log({ error });
     return res.status(500).json({ success: false, message: 'Contact system admin' });
