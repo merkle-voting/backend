@@ -13,6 +13,7 @@ function main() {
   app.use('/voters', routes.VotersRouter);
   app.use('/elections', routes.ElectionRouter);
   app.use('/proof', routes.ProofRouter);
+  app.use('/root', routes.RootRouter);
 
   app.use('*', (req, res) => {
     return res.status(404).json({ success: false, message: 'Unknown route' });
