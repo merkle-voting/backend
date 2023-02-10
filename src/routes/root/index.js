@@ -30,7 +30,7 @@ router.get('/:name/:id', async (req, res) => {
   } catch (error) {
     return res.status(500).json({ success: false, message: 'Contact system admin' });
   } finally {
-    // await dbclient.disconnect();
+    await dbclient.disconnect();
   }
 });
 
