@@ -68,6 +68,7 @@ const generateMerkleTree = async (collection) => {
       PROOF: proof.map((p) => '0x' + p.data.toString('hex')),
       ADDRESS: doc['ADDRESS'],
       ELECTIONID: doc['ELECTIONID'],
+      HASH: doc['HASH'],
     });
   });
 
@@ -110,7 +111,7 @@ router.put('/add-id', async (req, res) => {
     }
 
     const votersCollection = db.collection(data.election_name);
-    const merkleCollection = db.collection(`${data.election_name}-${data.election_id}`);
+    const merkleCollection = db.collection(`proofs-${data.election_id}`);
     const rootCollection = db.collection(`trees`);
     const merkleCollectionInsertOptions = { ordered: true };
 
@@ -120,7 +121,7 @@ router.put('/add-id', async (req, res) => {
 
     await merkleCollection.insertMany(addressProofs, merkleCollectionInsertOptions);
     await rootCollection.insertOne({
-      name: `${data.election_name}-${data.election_id}`,
+      name: `proofs-${data.election_id}`,
       value: root,
     });
 
