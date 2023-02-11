@@ -4,12 +4,12 @@ const dbclient = require('../../database/client');
 
 const router = express.Router();
 
-router.get('/:name/:id/:address', async (req, res) => {
-  const { id, address, name } = req.params;
+router.get('/:id/:address', async (req, res) => {
+  const { id, address } = req.params;
 
   try {
     const db = await dbclient.connect('merkle');
-    const proofCollection = db.collection(`${name}-${id}`);
+    const proofCollection = db.collection(`proofs-${id}`);
 
     const options = {
       projection: {
@@ -17,8 +17,6 @@ router.get('/:name/:id/:address', async (req, res) => {
         PROOF: 1,
       },
     };
-
-    console.log({ id, address });
 
     let cursor = proofCollection.find(
       {

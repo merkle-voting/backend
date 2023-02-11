@@ -3,8 +3,8 @@ const dbclient = require('../../database/client');
 
 const router = express.Router();
 
-router.get('/:name/:id', async (req, res) => {
-  const { name, id } = req.params;
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
 
   try {
     const db = await dbclient.connect('merkle');
@@ -17,7 +17,7 @@ router.get('/:name/:id', async (req, res) => {
       },
     };
 
-    const query = `${name}-${id}`;
+    const query = `proofs-${id}`;
     let cursor = await rootCollection.findOne({ name: query }, options);
 
     if (cursor === null) {

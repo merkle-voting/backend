@@ -14,12 +14,13 @@ function main() {
   app.use('/elections', routes.ElectionRouter);
   app.use('/proof', routes.ProofRouter);
   app.use('/root', routes.RootRouter);
+  app.use('/poll', routes.PollRouter);
 
   app.use('*', (req, res) => {
     return res.status(404).json({ success: false, message: 'Unknown route' });
   });
 
-  const PORT = process.env.PORT || 3000;
+  const PORT = process.env.PORT || 8080;
 
   app.listen(PORT, () => {
     console.log(`App listening on ${PORT} port`);

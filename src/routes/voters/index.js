@@ -56,6 +56,50 @@ router.post('/details', upload.single('file'), async (req, res) => {
   });
 });
 
+router.get('/:id/:address', async (req, res) => {
+  const { id, address } = req.params;
+
+  try {
+    const db = await dbclient.connect('merkle');
+    const proofCollection = db.collection(`proofs-${id}`);
+    const options = {
+      projection: {
+        _id: 0,
+        PROOF: 1,
+        HASH: 1,
+      },
+    };
+
+    const cursor = await proofCollection.findOne(
+      {
+        ELECTIONID: id,
+        ADDRESS: address,
+      },
+      options
+    );
+
+    console.log({ id, address });
+
+    if (cursor === null) {
+      return res.status(400).json({ success: false, message: 'No matching data' });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Data retrieved successfully',
+      data: {
+        hash: cursor.HASH,
+        proofs: cursor.PROOF,
+      },
+    });
+  } catch (error) {
+    console.log({ error });
+    return res.status(500).json({ success: false, message: 'Contact system admin' });
+  } finally {
+    await dbclient.disconnect();
+  }
+});
+
 router.use('*', (req, res) => {
   return res.status(404).json({ success: false, message: 'Unknown route' });
 });
