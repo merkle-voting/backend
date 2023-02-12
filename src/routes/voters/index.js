@@ -78,8 +78,6 @@ router.get('/:id/:address', async (req, res) => {
       options
     );
 
-    console.log({ id, address });
-
     if (cursor === null) {
       return res.status(400).json({ success: false, message: 'No matching data' });
     }
@@ -94,7 +92,7 @@ router.get('/:id/:address', async (req, res) => {
     });
   } catch (error) {
     console.log({ error });
-    return res.status(500).json({ success: false, message: 'Contact system admin' });
+    return res.status(500).json({ success: false, message: 'Contact system admin.' });
   } finally {
     await dbclient.disconnect();
   }
