@@ -61,7 +61,7 @@ const generateMerkleTree = async (collection) => {
 
   documents.forEach((doc, index) => {
     const leaf = leaves[index];
-    console.log({ doc });
+
     const proof = tree.getProof(leaf);
     addressProofs.push({
       LEAF: '0x' + leaves[index].toString(),
@@ -130,7 +130,7 @@ router.put('/add-id', async (req, res) => {
     console.log({ error });
     return res.status(500).json({ success: false, message: 'Contact system admin' });
   } finally {
-    // await dbclient.disconnect();
+    await dbclient.disconnect();
   }
 });
 

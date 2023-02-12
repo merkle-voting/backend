@@ -18,7 +18,7 @@ router.get('/:id/:address', async (req, res) => {
       },
     };
 
-    let cursor = proofCollection.find(
+    let cursor = await proofCollection.find(
       {
         ELECTIONID: id,
         ADDRESS: address,
