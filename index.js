@@ -23,7 +23,7 @@ function main() {
   const PORT = process.env.PORT || 8080;
 
   app.listen(PORT, () => {
-    console.log(`App listening on ${PORT} port`);
+    console.log(`App listening on >> ${PORT} >> port`);
   });
 }
 
