@@ -24,9 +24,9 @@ router.get('/:id', async (req, res) => {
       return res.status(400).json({ success: false, message: 'No root' });
     }
 
-    return res
-      .status(200)
-      .json({ success: true, message: 'Root retrieved successfully', root: cursor.value });
+    const cursorValue = await cursor.value;
+
+    return res.status(200).json({ success: true, message: 'Root retrieved successfully', root: cursorValue });
   } catch (error) {
     return res.status(500).json({ success: false, message: 'Contact system admin' });
   } finally {
